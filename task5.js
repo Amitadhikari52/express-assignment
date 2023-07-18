@@ -1,21 +1,33 @@
-const path = require('path');
 const express = require('express');
-const bodyParser = require('body-parser');
+const path = require('path');
+
 const app = express();
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+const port = 3000;
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
+// Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-
-app.use('/admin', adminRoutes);
-app.use(shopRoutes);
-
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+// Routes
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+// Contact Us form
+app.get('/contactus', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'contactus.html'));
+});
+
+// Form submission success
+app.post('/success', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'success.html'));
+});
+
+// 404 Page Not Found
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });

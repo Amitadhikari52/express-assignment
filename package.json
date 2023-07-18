@@ -4,5 +4,15 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-session": "^1.17.3"
-  }
+  },
+  "name": "express-assignment",
+  "version": "1.0.0",
+  "main": "chat app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
