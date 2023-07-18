@@ -1,27 +1,42 @@
-import express from 'express';
-import path from 'path';
-import { contactUsController, successController, error404Controller } from './controllers';
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
 
 const app = express();
-const users = [];
+const port = 3000;
 
-app.use(express.static(path.join(path.resolve(), 'public')));
-app.use(express.urlencoded({ extended: true }));
+// Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Setting up View Engine
+// Parse URL-encoded bodies (as sent by HTML forms)
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Set views directory and view engine
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+// Import controllers
+const contactController = require('./controllers/contactController');
+const successController = require('./controllers/successController');
 
 // Routes
 app.get('/', (req, res) => {
-  res.render('index', { name: 'Adhikari' });
+  res.render('index');
 });
 
-app.get('/contactus', contactUsController);
-app.post('/success', successController);
+// Contact Us form
+app.get('/contactus', contactController.getContactPage);
+app.post('/contactus', contactController.postContactForm);
 
-// Error404 route
-app.use(error404Controller);
+// Form submission success
+app.get('/success', successController.getSuccessPage);
 
-app.listen(8100, () => {
-  console.log('Server is running');
+// 404 Page Not Found
+app.use((req, res) => {
+  res.status(404).render('404');
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });
